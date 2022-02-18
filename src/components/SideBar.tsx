@@ -1,20 +1,28 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from './Button';
 
-interface GenreProps {
-  genres: {
-    id: number;
-    name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
-    title: string;
-  };
+import { api } from '../services/api';
+
+interface GenreResponseProps {
+  id: number;
+  name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
+  title: string;
 }
 
-interface OtherProps {
+interface SideBarProps {
   handleClickButton: (event: number) => void;
   selectedGenreId: number;
 }
 
-export function SideBar(props: GenreProps[] & OtherProps) {
+export function SideBar(props: SideBarProps) {
+  const [genres, setGenres] = useState<GenreResponseProps[]>([]);
+
+  useEffect(() => {
+    api.get<GenreResponseProps[]>('genres').then((response) => {
+      setGenres(response.data);
+    });
+  }, []);
+
   return (
     <nav className="sidebar">
       <span>
@@ -22,7 +30,7 @@ export function SideBar(props: GenreProps[] & OtherProps) {
       </span>
 
       <div className="buttons-container">
-        {props.genres.map((genre: any) => (
+        {genres.map((genre: any) => (
           <Button
             key={String(genre.id)}
             title={genre.title}
