@@ -19,20 +19,20 @@ interface ContentProps {
   selectedGenreId: number;
 }
 
-export function Content(props: ContentProps) {
+export function Content({ selectedGenreTitle, selectedGenreId }: ContentProps) {
   const [movies, setMovies] = useState<MovieProps[]>([]);
 
   useEffect(() => {
-    api.get<MovieProps[]>(`movies/?Genre_id=${props.selectedGenreId}`).then((response) => {
+    api.get<MovieProps[]>(`movies/?Genre_id=${selectedGenreId}`).then((response) => {
       setMovies(response.data);
     });
-  }, [props.selectedGenreId]);
+  }, [selectedGenreId]);
 
   return (
     <div className="container">
       <header>
         <span className="category">
-          Categoria:<span> {props.selectedGenreTitle}</span>
+          Categoria:<span> {selectedGenreTitle}</span>
         </span>
       </header>
 
